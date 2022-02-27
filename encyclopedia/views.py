@@ -12,9 +12,13 @@ def index(request):
 def entry(request, entry):
     list_of_entries = util.list_entries()
     if entry in list_of_entries:
-        entry_html = markdown2.markdown(util.get_entry(entry))
+        entry_html = (markdown2.markdown(util.get_entry(entry)))
         return render(request, "encyclopedia/entry.html", {
-            "entry":entry_html,
+            "title": entry,
+            "entry":entry_html
         })
     else:
-        return (HttpResponse("Error in views.py"))
+        return render(request, "encyclopedia/entry.html", {
+            "title": "Error",
+            "entry":(f"No entry called '{entry}' found.")
+        })
