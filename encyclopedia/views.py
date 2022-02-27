@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
+import markdown2
 
 from . import util
 
@@ -8,3 +9,12 @@ def index(request):
         "entries": util.list_entries()
     })
 
+def entry(request, entry):
+    list_of_entries = util.list_entries()
+    if entry in list_of_entries:
+        entry_html = markdown2.markdown(util.get_entry(entry))
+        return render(request, "encyclopedia/entry.html", {
+            "entry":entry_html,
+        })
+    else:
+        return (HttpResponse("Error in views.py"))
