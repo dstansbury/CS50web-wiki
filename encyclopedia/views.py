@@ -1,5 +1,6 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 import markdown2
+import random
 
 from . import util
 
@@ -20,5 +21,14 @@ def entry(request, entry):
     else:
         return render(request, "encyclopedia/entry.html", {
             "title": "Error",
-            "entry":(f"No entry called '{entry}' found.")
+            "entry":(f"ERROR: No entry called '{entry}' found.")
         })
+
+def random_page(request):
+    list_of_entries = util.list_entries()
+    entry = random.choice(list_of_entries)
+    entry_html = (markdown2.markdown(util.get_entry(entry)))
+    return redirect(f"wiki/{entry}", {
+        "title": entry,
+        "entry":entry_html
+    })
