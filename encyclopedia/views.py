@@ -27,8 +27,14 @@ def entry(request, entry):
 def random_page(request):
     list_of_entries = util.list_entries()
     entry = random.choice(list_of_entries)
-    entry_html = (markdown2.markdown(util.get_entry(entry)))
-    return redirect(f"wiki/{entry}", {
-        "title": entry,
-        "entry":entry_html
-    })
+    return redirect(f"wiki/{entry}")
+
+def search(request, search):
+    list_of_entries = util.list_entries()
+    if search in list_of_entries:
+        return redirect((f"wiki/{search}"))
+    else:
+        return redirect("encyclopedia/entry.html", {
+            "title": "Error",
+            "entry":(f"ERROR: No entry called '{search}' found.")
+        })
