@@ -4,7 +4,6 @@ import random
 
 from . import util
 
-
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -29,12 +28,13 @@ def random_page(request):
     entry = random.choice(list_of_entries)
     return redirect(f"wiki/{entry}")
 
-def search(request, search):
+def search(request):
+    search = request.GET.get('q')
     list_of_entries = util.list_entries()
     if search in list_of_entries:
         return redirect((f"wiki/{search}"))
     else:
-        return redirect("encyclopedia/entry.html", {
+        return render(request, "encyclopedia/entry.html", {
             "title": "Error",
             "entry":(f"ERROR: No entry called '{search}' found.")
         })
