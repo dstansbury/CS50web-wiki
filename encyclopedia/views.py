@@ -20,7 +20,8 @@ def entry(request, entry):
     else:
         return render(request, "encyclopedia/entry.html", {
             "title": "Error",
-            "entry":(f"ERROR: No entry called '{entry}' found.")
+            "Heading": "Error",
+            "entry":(f"No entry called '{entry}' found.")
         })
 
 def random_page(request):
@@ -34,7 +35,9 @@ def search(request):
     if search in list_of_entries:
         return redirect((f"wiki/{search}"))
     else:
-        return render(request, "encyclopedia/entry.html", {
+        ### return render(request, "encyclopedia/entry.html",
+        return render(request, "encyclopedia/searchResults.html", {
             "title": "Error",
-            "entry":(f"ERROR: No entry called '{search}' found.")
+            "Heading": "Error",
+            "entry":(f"No entry called '{search}' found.")
         })
