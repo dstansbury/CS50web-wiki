@@ -48,9 +48,16 @@ def create(request):
         title = (request.POST.get('newTitle')).capitalize()
         body = request.POST.get('newBody')
         if title and body:
-            with open(f"entries/{title}.md", "w") as file:
-                file.write(f"# {title} \n \n" + body)
-            return redirect(f"wiki/{title}")
+            if util.search_entries(title, util.list_entries()):
+                return render(request, "encyclopedia/entry.html", {
+                "title": "Error",
+                "Heading": "Error",
+                "entry": ("A page with that title already exists. Please edit that page, or try a different title.")
+                })
+            else:
+                with open(f"entries/{title}.md", "w") as file:
+                    file.write(f"# {title} \n \n" + body)
+                    return redirect(f"wiki/{title}")
 
         elif title and not body:
             return render(request, "encyclopedia/entry.html", {
