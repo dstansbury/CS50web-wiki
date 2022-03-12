@@ -7,12 +7,16 @@
 {% block body %}
     <h1> {{ Heading }} </h1>    
     <div>
+        {% if Results %}
         <ul>
-            {% for entry in entries %}
+            {% for result in Results %}
                 <li>
-                    <a href="wiki/{{ entry }}">{{ entry }}</a>
+                    <a href="wiki/{{ result }}">{{ result }}</a>
                 </li>
             {% endfor %}
         </ul>
+        {% else %}
+        <p>No search results found. Please try a different search term.</p>
+        {% endif %}
     </div>
 {% endblock %}

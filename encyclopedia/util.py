@@ -35,3 +35,12 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+def search_entries(searchTerm, entries):
+    for entry in entries:
+        if entry.casefold() == searchTerm.casefold():
+            return True
+        else:
+            continue
+    return False    
+    

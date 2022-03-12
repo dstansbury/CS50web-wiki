@@ -11,7 +11,7 @@ def index(request):
 
 def entry(request, entry):
     list_of_entries = util.list_entries()
-    if entry in list_of_entries:
+    if util.search_entries(entry, list_of_entries):
         entry_html = (markdown2.markdown(util.get_entry(entry)))
         return render(request, "encyclopedia/entry.html", {
             "title": entry,
@@ -21,7 +21,7 @@ def entry(request, entry):
         return render(request, "encyclopedia/entry.html", {
             "title": "Error",
             "Heading": "Error",
-            "entry":(f"No entry called '{entry}' found.")
+            "entry":(f"No entry called '{entry}' found. Try searching using the bar on the left instead n.")
         })
 
 def random_page(request):
@@ -32,12 +32,12 @@ def random_page(request):
 def search(request):
     search = request.GET.get('q')
     list_of_entries = util.list_entries()
-    if search in list_of_entries:
+    if util.search_entries(search, list_of_entries):
         return redirect((f"wiki/{search}"))
     else:
-        ### return render(request, "encyclopedia/entry.html",
+        results_list = [i for i in list_of_entries if search.casefold() in i.casefold()]
         return render(request, "encyclopedia/searchResults.html", {
-            "title": "Error",
-            "Heading": "Error",
-            "entry":(f"No entry called '{search}' found.")
+            "title": "Search results",
+            "Heading": "Search results",
+            "Results": results_list
         })
