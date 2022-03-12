@@ -1,3 +1,4 @@
+from turtle import title
 from django.shortcuts import render, HttpResponse, redirect
 import markdown2
 import random
@@ -41,3 +42,32 @@ def search(request):
             "Heading": "Search results",
             "Results": results_list
         })
+
+def create(request):
+    if request.method == "POST":
+        title = (request.POST.get('newTitle')).capitalize()
+        body = request.POST.get('newBody')
+        if title and body:
+            with open(f"entries/{title}.md", "w") as file:
+                file.write(f"# {title} \n \n" + body)
+            return redirect(f"wiki/{title}")
+
+        elif title and not body:
+            return render(request, "encyclopedia/entry.html", {
+            "title": "Error",
+            "Heading": "Error",
+            "entry": (f"No body entered. Please try again.")
+        })
+
+        else:
+            return render(request, "encyclopedia/entry.html", {
+            "title": "Error",
+            "Heading": "Error",
+            "entry": (f"No title entered. Please try again.")
+        })
+    else: 
+        return render(request, "encyclopedia/create.html", {
+        "title": "Create page",
+        "Heading": "Create page"
+    })
+
