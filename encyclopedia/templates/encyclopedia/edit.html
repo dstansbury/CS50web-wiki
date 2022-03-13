@@ -7,9 +7,9 @@
 {% block body %}
     <h1> {{ Heading }} </h1>    
     <div>
-        <form action="{{ title }}/save" method="POST">
+        <form action="save" method="POST">
             {% csrf_token %}
-            <textarea name="editBody" name="editedBody">{{ body }}</textarea>
+            <textarea name="editedBody">{{ body }}</textarea>
             <br>
             <button type="submit" name="saveButton">Save edits</button>
         </form>

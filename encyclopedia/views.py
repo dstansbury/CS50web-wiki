@@ -21,7 +21,7 @@ def entry(request, entry):
     else:
         return render(request, "encyclopedia/error.html", {
             "title": "Error",
-            "entry":(f"No entry called '{entry}' found. Try searching using the bar on the left instead n.")
+            "entry":(f"No page called '{entry}' found. Try searching using the bar on the left instead n.")
         })
 
 def random_page(request):
@@ -78,13 +78,12 @@ def edit(request, entry):
     return render(request, "encyclopedia/edit.html", {
         "entry": entry,
         "body": util.get_entry(entry),
-        "title": "Edit page",
+        "title": "",
         "Heading": (f"Edit page")
     })
 
-def save(request, entry):
+def save(request, newEntry):
     body = request.POST.get('editedBody')
-    with open(f"entries/{entry}.md", "r+") as f:
-        f.truncate(2)
+    with open(f"entries/{newEntry}.md", "w") as f:
         f.write(body)
-        return redirect(f"wiki/{entry}")
+    return redirect(f'/wiki/{newEntry}')
