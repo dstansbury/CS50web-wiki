@@ -5,11 +5,8 @@
 {% endblock %}
 
 {% block body %}
+    <h1> Error </h1>
     <div>
         {{ entry|safe }}
     </div>
-    <form action= "{{ title }}/edit" method="POST">
-        {% csrf_token %}
-        <button type="submit" name="editPage">Edit page</button>
-    </form>
 {% endblock %}

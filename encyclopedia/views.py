@@ -19,9 +19,8 @@ def entry(request, entry):
             "entry":entry_html
         })
     else:
-        return render(request, "encyclopedia/entry.html", {
+        return render(request, "encyclopedia/error.html", {
             "title": "Error",
-            "Heading": "Error",
             "entry":(f"No entry called '{entry}' found. Try searching using the bar on the left instead n.")
         })
 
@@ -49,9 +48,8 @@ def create(request):
         body = request.POST.get('newBody')
         if title and body:
             if util.search_entries(title, util.list_entries()):
-                return render(request, "encyclopedia/entry.html", {
+                return render(request, "encyclopedia/error.html", {
                 "title": "Error",
-                "Heading": "Error",
                 "entry": ("A page with that title already exists. Please edit that page, or try a different title.")
                 })
             else:
@@ -60,16 +58,14 @@ def create(request):
                     return redirect(f"wiki/{title}")
 
         elif title and not body:
-            return render(request, "encyclopedia/entry.html", {
+            return render(request, "encyclopedia/error.html", {
             "title": "Error",
-            "Heading": "Error",
             "entry": (f"No body entered. Please try again.")
         })
 
         else:
-            return render(request, "encyclopedia/entry.html", {
+            return render(request, "encyclopedia/error.html", {
             "title": "Error",
-            "Heading": "Error",
             "entry": (f"No title entered. Please try again.")
         })
     else: 
@@ -78,3 +74,17 @@ def create(request):
         "Heading": "Create page"
     })
 
+def edit(request, entry):
+    return render(request, "encyclopedia/edit.html", {
+        "entry": entry,
+        "body": util.get_entry(entry),
+        "title": "Edit page",
+        "Heading": (f"Edit page")
+    })
+
+def save(request, entry):
+    body = request.POST.get('editedBody')
+    with open(f"entries/{entry}.md", "r+") as f:
+        f.truncate(2)
+        f.write(body)
+        return redirect(f"wiki/{entry}")
