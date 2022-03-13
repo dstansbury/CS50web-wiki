@@ -37,6 +37,12 @@ def get_entry(title):
         return None
 
 def search_entries(searchTerm, entries):
+    """
+    Searches in a case insensitive manner if an
+    entry already exists in the list of entries.
+    If the entry exists in the list, returns True.
+    Else returns False.
+    """
     for entry in entries:
         if entry.casefold() == searchTerm.casefold():
             return True
