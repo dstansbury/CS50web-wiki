@@ -53,9 +53,9 @@ def create(request):
                 "entry": ("A page with that title already exists. Please edit that page, or try a different title.")
                 })
             else:
-                with open(f"entries/{title}.md", "w") as file:
-                    file.write(f"# {title} \n \n" + body)
-                    return redirect(f"wiki/{title}")
+               with open(f"entries/{title}.md", "w") as file:
+                   file.write(f"# {title} \n \n" + body)
+                   return redirect(f"wiki/{title}")
 
         elif title and not body:
             return render(request, "encyclopedia/error.html", {
@@ -84,6 +84,7 @@ def edit(request, entry):
 
 def save(request, newEntry):
     body = request.POST.get('editedBody')
+    
     with open(f"entries/{newEntry}.md", "w") as f:
         f.write(body)
-    return redirect(f'/wiki/{newEntry}')
+        return redirect(f'/wiki/{newEntry}')
