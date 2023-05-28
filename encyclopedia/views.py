@@ -29,7 +29,7 @@ def entry(request, entry):
     else:
         return render(request, "encyclopedia/error.html", {
             "title": "Error",
-            "entry":(f"No page called '{entry}' found. Try searching using the bar on the left instead n.")
+            "entry":(f"No page called '{entry}' found. Try searching using the bar on the left instead.")
         })
 
 def random_page(request):
