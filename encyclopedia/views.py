@@ -6,11 +6,19 @@ import random
 from . import util
 
 def index(request):
+    """
+    Renders the index page
+    """
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
 
 def entry(request, entry):
+    """
+    Renders the page of a particular entry, converting
+    to HTML before publishing. If no entry by the name
+    requested, returns an Error page.
+    """
     list_of_entries = util.list_entries()
     if util.search_entries(entry, list_of_entries):
         entry_html = (markdown2.markdown(util.get_entry(entry)))
@@ -21,15 +29,27 @@ def entry(request, entry):
     else:
         return render(request, "encyclopedia/error.html", {
             "title": "Error",
-            "entry":(f"No page called '{entry}' found. Try searching using the bar on the left instead n.")
+            "entry":(f"No page called '{entry}' found. Try searching using the bar on the left instead.")
         })
 
 def random_page(request):
+    """
+    Grabs a random page from the list of entries and
+    renders it.
+    """
     list_of_entries = util.list_entries()
     entry = random.choice(list_of_entries)
     return redirect(f"wiki/{entry}")
 
 def search(request):
+    """
+    Uses the search bar in the layout.html file to search for
+    existing pages. If an exact match (case insensitively), 
+    redirects to the matchin entry page.
+    
+    If a partial match, renders a list of all the entry pages
+    with the partial match.
+    """
     search = request.GET.get('q')
     list_of_entries = util.list_entries()
     if util.search_entries(search, list_of_entries):
@@ -43,6 +63,11 @@ def search(request):
         })
 
 def create(request):
+    """
+    Creates a new entry, with a separate title and body.
+    Returns errors if either a title or a body is not entered.
+    Returns an error if a page with that name already exists.
+    """
     if request.method == "POST":
         title = (request.POST.get('newTitle')).capitalize()
         body = request.POST.get('newBody')
@@ -75,6 +100,9 @@ def create(request):
     })
 
 def edit(request, entry):
+    """
+    Renders an edit page for the entry that was being viewed.
+    """
     return render(request, "encyclopedia/edit.html", {
         "entry": entry,
         "body": util.get_entry(entry),
@@ -83,6 +111,9 @@ def edit(request, entry):
     })
 
 def save(request, newEntry):
+    """
+    Saves the edits made to a page and overwrites the old file.
+    """
     body = request.POST.get('editedBody')
     
     with open(f"entries/{newEntry}.md", "w") as f:
